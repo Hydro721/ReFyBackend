@@ -29,6 +29,7 @@ run(async (context: HandlerContext) => {
   if (stopWords.some((word) => lowerContent.includes(word))) {
   }
 
+  console.log("Hey");
   console.log(sender.address);
   const query = 'SELECT * FROM users where address = ?';
   const row = await db.get(query, [sender.address]);  // Use db.get to retrieve a single row
@@ -37,7 +38,7 @@ run(async (context: HandlerContext) => {
     console.log(row); 
 
     if(text === "1") {
-      await context.send(`You have ${row.points} points`);
+      await context.send(`https://www.stack.so/leaderboard/leaderboard-40a3-78225-5462`);
     }
     else if(text === "2") {
       const query = 'DELETE FROM users WHERE address = ?';
@@ -45,7 +46,7 @@ run(async (context: HandlerContext) => {
       await context.send(`You have been unsubscribed`);
     }
     else {
-      await context.send("Welcome subscriber! Here are the available Promotion challenges for this Month");
+      await context.send("Welcome subscriber! Here are the available Promotion challenges for October 2024");
       const query = 'select * from promotions';
       const rows = await db.all(query);  // Execute the query
       let promotionsMessage = "";
@@ -54,19 +55,20 @@ run(async (context: HandlerContext) => {
         promotionsMessage += `${row.sno} ) Buy ${row.item} to get: ${row.points} points\n`;
       });
       await context.send(promotionsMessage);
-      await context.send("Choose an option:\n1. See my points\n2. Unsubscribe");
+      await context.send("Choose an option:\n1. See my rank on leaderBoard  \n2. Unsubscribe");
     }
   } else {
       if(text === "1") {
-        await context.send("Information about the bot");
+        await context.send("We are the Chipotle rewards bot where you can earn points on every purchase. These points can be redeemed for discounts and cashback.");
+        await context.send("To enroll for reward points reply back with 2! Thanks");
       }
       else if(text ===  "2") {
         const query = 'INSERT INTO users (address) VALUES (?)';
         await db.run(query, [sender.address]);  // Execute the query
-        await context.send("Thanks for subscribing!");
+        await context.send("Thanks for subscribing! You can win upto 1000$ in cashback. Say yes to enter October 2024 promo challenge");
       }
       else {
-        let message = "Welcome! Choose an option:\n1. Info\n2. Subscribe";
+        let message = "Welcome to Chipotle rewards! Please Choose an option:\n 1. Infomation \n2. Subscribe";
         await context.send(message);
       }
   }
